@@ -1,6 +1,5 @@
 import '../library_manager.dart';
 
-class Dvd extends LibraryItem {
-  
-  Dvd({required super.title, required super.status});
+class DVD extends LibraryItem {
+  DVD({required super.title, required super.status});
 }

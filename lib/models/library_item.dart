@@ -9,7 +9,7 @@ abstract class LibraryItem {
   }
 
   @override
-  toString() {
+  String toString() {
     return "The title of this item : $_title";
   }
 

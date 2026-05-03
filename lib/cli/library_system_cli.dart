@@ -21,7 +21,7 @@ class LibrarySystemCli {
       } else if (choice == "6") {
         _reserve();
       } else if (choice == "7") {
-        _existSystem();
+        _exitSystem();
       }
     }
   }
@@ -34,8 +34,8 @@ class LibrarySystemCli {
     print("3. Add New DVD");
     print("4. Add New Magazine");
     print("5. I Need to borrow");
-    print("6. I Need to reserved");
-    print("7. Exist system");
+    print("6. I Need to reserve");
+    print("7. Exit system");
   }
 
   void _getTheAvailable() {
@@ -54,10 +54,10 @@ class LibrarySystemCli {
 
   void _addNewDvd() {
     print("Enter DVD Details\n");
-    Dvd newDvd;
+    DVD newDvd;
     print("Enter DVD Name :");
     String? name = stdin.readLineSync();
-    newDvd = Dvd(title: name!, status: Status.available);
+    newDvd = DVD(title: name!, status: Status.available);
     system!.addNewItem(item: newDvd);
   }
 
@@ -116,7 +116,7 @@ class LibrarySystemCli {
     }
   }
 
-  void _existSystem() {
+  void _exitSystem() {
     print("Library System Closed\n");
   }
 }

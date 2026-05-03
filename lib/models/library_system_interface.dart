@@ -1,5 +1,5 @@
-import 'package:library_manager/book_enum.dart';
-import 'package:library_manager/library_item.dart';
+import '../library_manager.dart';
+
 
 abstract class LibrarySystemInterface {
   List<LibraryItem> get items;

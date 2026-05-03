@@ -1,4 +1,4 @@
-import 'package:library_manager/library_item.dart';
+import '../library_manager.dart';
 
 class Book extends LibraryItem {
   Book({required super.title, required super.status});

@@ -1,9 +1,5 @@
 import 'dart:io';
-import 'package:library_manager/book.dart';
-import 'package:library_manager/book_enum.dart';
-import 'package:library_manager/dvd.dart';
-import 'package:library_manager/library_system.dart';
-import 'package:library_manager/magazine.dart';
+import '../library_manager.dart';
 
 class LibrarySystemCli {
   LibrarySystem? system = LibrarySystem(items: []);

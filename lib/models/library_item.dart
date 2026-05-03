@@ -1,4 +1,4 @@
-import 'package:library_manager/book_enum.dart';
+import '../library_manager.dart';
 
 abstract class LibraryItem {
   String? _title;

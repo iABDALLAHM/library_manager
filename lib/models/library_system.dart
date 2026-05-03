@@ -1,6 +1,5 @@
-import 'package:library_manager/book_enum.dart';
-import 'package:library_manager/library_item.dart';
-import 'package:library_manager/library_system_iterface.dart';
+
+import '../library_manager.dart';
 
 class LibrarySystem implements LibrarySystemInterface {
   List<LibraryItem>? _items;

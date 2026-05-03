@@ -2,26 +2,30 @@ import 'dart:io';
 import '../library_manager.dart';
 
 class LibrarySystemCli {
-  LibrarySystem? system = LibrarySystem(items: []);
+  LibrarySystem system = LibrarySystem(items: []);
 
   void start() {
     while (true) {
       _showMenu();
       String? choice = stdin.readLineSync();
-      if (choice == "1") {
-        _getTheAvailable();
-      } else if (choice == "2") {
-        _addNewBook();
-      } else if (choice == "3") {
-        _addNewDvd();
-      } else if (choice == "4") {
-        _addNewMagazine();
-      } else if (choice == "5") {
-        _borrow();
-      } else if (choice == "6") {
-        _reserve();
-      } else if (choice == "7") {
-        _exitSystem();
+      if (choice == null || choice.isEmpty) {
+        print("invalid input");
+      } else {
+        if (choice == "1") {
+          _getTheAvailable();
+        } else if (choice == "2") {
+          _addNewBook();
+        } else if (choice == "3") {
+          _addNewDvd();
+        } else if (choice == "4") {
+          _addNewMagazine();
+        } else if (choice == "5") {
+          _borrow();
+        } else if (choice == "6") {
+          _reserve();
+        } else if (choice == "7") {
+          _exitSystem();
+        }
       }
     }
   }
@@ -39,7 +43,7 @@ class LibrarySystemCli {
   }
 
   void _getTheAvailable() {
-    print("The items available in the library: ${system!.items}");
+    print("The items available in the library: ${system.items}");
   }
 
   void _addNewBook() {
@@ -47,9 +51,19 @@ class LibrarySystemCli {
     Book newBook;
     print("Enter Book Name :");
     String? name = stdin.readLineSync();
-    newBook = Book(title: name!, status: Status.available);
-    system!.addNewItem(item: newBook);
-    print("New Book Added\n");
+    if (name == null || name.isEmpty) {
+      print("invalid input");
+    } else {
+      newBook = Book(
+        title: name,
+        status: Status.available,
+        author: '',
+        pages: 34,
+        isbn: '',
+      );
+      system.addNewItem(item: newBook);
+      print("New Book Added\n");
+    }
   }
 
   void _addNewDvd() {
@@ -57,8 +71,17 @@ class LibrarySystemCli {
     DVD newDvd;
     print("Enter DVD Name :");
     String? name = stdin.readLineSync();
-    newDvd = DVD(title: name!, status: Status.available);
-    system!.addNewItem(item: newDvd);
+    if (name == null || name.isEmpty) {
+      print("invalid input");
+    } else {
+      newDvd = DVD(
+        title: name,
+        status: Status.available,
+        duration: 23,
+        director: '',
+      );
+      system.addNewItem(item: newDvd);
+    }
   }
 
   void _addNewMagazine() {
@@ -66,53 +89,37 @@ class LibrarySystemCli {
     Magazine newMagazine;
     print("Enter Magazine Name :");
     String? name = stdin.readLineSync();
-    newMagazine = Magazine(title: name!, status: Status.available);
-    system!.addNewItem(item: newMagazine);
+    if (name == null || name.isEmpty) {
+      print("invalid input");
+    } else {
+      newMagazine = Magazine(
+        title: name,
+        status: Status.available,
+        issueNumber: 345,
+        publisher: '',
+      );
+      system.addNewItem(item: newMagazine);
+    }
   }
 
   void _borrow() {
-    print("what are you need to borrow?\n");
-    print("1. A Book?");
-    print("2. A Dvd?");
-    print("3. A Magazine?");
-    String? choice = stdin.readLineSync();
+    print("Enter item name: \n");
 
-    if (choice == "1") {
-      print("enter the book name:");
-      String? name = stdin.readLineSync();
-      system!.changeStatus(itemName: name!, status: Status.borrowed);
-    } else if (choice == "2") {
-      print("enter the Dvd name:");
-      String? name = stdin.readLineSync();
-
-      system!.changeStatus(itemName: name!, status: Status.borrowed);
-    } else if (choice == "3") {
-      print("enter the Magzine name:");
-      String? name = stdin.readLineSync();
-      system!.changeStatus(itemName: name!, status: Status.borrowed);
+    String? name = stdin.readLineSync();
+    if (name == null || name.isEmpty) {
+      print("invalid input");
+    } else {
+      system.changeStatus(itemName: name, status: Status.borrowed);
     }
   }
 
   void _reserve() {
-    print("what are you need to reserve?\n");
-    print("1. A Book?");
-    print("2. A Dvd?");
-    print("3. A Magazine?");
-    String? choice = stdin.readLineSync();
-
-    if (choice == "1") {
-      print("enter the book name:");
-      String? name = stdin.readLineSync();
-      system!.changeStatus(itemName: name!, status: Status.reserved);
-    } else if (choice == "2") {
-      print("enter the Dvd name:");
-      String? name = stdin.readLineSync();
-
-      system!.changeStatus(itemName: name!, status: Status.reserved);
-    } else if (choice == "3") {
-      print("enter the Magzine name:");
-      String? name = stdin.readLineSync();
-      system!.changeStatus(itemName: name!, status: Status.reserved);
+    print("Enter item name: \n");
+    String? name = stdin.readLineSync();
+    if (name == null || name.isEmpty) {
+      print("invalid input");
+    } else {
+      system.changeStatus(itemName: name, status: Status.reserved);
     }
   }
 

@@ -1,8 +1,7 @@
-
 import '../library_manager.dart';
 
 class LibrarySystem implements LibrarySystemInterface {
-  List<LibraryItem>? _items;
+  late List<LibraryItem> _items;
 
   LibrarySystem({required List<LibraryItem> items}) {
     _items = items;
@@ -10,12 +9,12 @@ class LibrarySystem implements LibrarySystemInterface {
 
   @override
   List<LibraryItem> get items {
-    return _items!;
+    return _items;
   }
 
   @override
   void changeStatus({required String itemName, required Status status}) {
-    for (var item in _items!) {
+    for (var item in _items) {
       if (item.title == itemName) {
         item.status = status;
       }
@@ -24,6 +23,6 @@ class LibrarySystem implements LibrarySystemInterface {
 
   @override
   void addNewItem({required LibraryItem item}) {
-    _items!.add(item);
+    _items.add(item);
   }
 }

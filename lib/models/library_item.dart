@@ -1,31 +1,15 @@
 import '../library_manager.dart';
 
 abstract class LibraryItem {
-  String? _title;
-  Status? _status;
-  LibraryItem({required String title, required Status status}) {
-    _title = title;
-    _status = status;
-  }
+  String title;
+  Status status;
+  LibraryItem({required this.title, required this.status});
+
+  void borrow();
+  void reserve();
 
   @override
   String toString() {
-    return "The title of this item : $_title";
-  }
-
-  Status? get status {
-    return _status;
-  }
-
-  String? get title {
-    return _title;
-  }
-
-  set title(String title) {
-    _title = title;
-  }
-
-  set status(Status status) {
-    _status = status;
+    return "[$runtimeType] Title: $title, Status: $status";
   }
 }

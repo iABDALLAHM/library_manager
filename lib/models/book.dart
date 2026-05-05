@@ -12,13 +12,13 @@ class Book extends LibraryItem {
     required this.isbn,
   });
 
-  @override
-  void borrow() {
-    print("Borrowing a book");
-  }
+  // @override
+  // void borrow() {
+  //   print("Borrowing a book");
+  // }
 
-  @override
-  void reserve() {
-    print("Reserve a book");
-  }
+  // @override
+  // void reserve() {
+  //   print("Reserve a book");
+  // }
 }

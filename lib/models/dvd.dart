@@ -11,13 +11,13 @@ class DVD extends LibraryItem {
   });
 
 
-  @override
-  void borrow() {
-    print("Borrowing a DVD");
-  }
+  // @override
+  // void borrow() {
+  //   print("Borrowing a DVD");
+  // }
 
-  @override
-  void reserve() {
-    print("Reserve a DVD");
-  }
+  // @override
+  // void reserve() {
+  //   print("Reserve a DVD");
+  // }
 }

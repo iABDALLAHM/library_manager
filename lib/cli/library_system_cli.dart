@@ -1,129 +1,199 @@
-import 'dart:io';
 import '../library_manager.dart';
 
 class LibrarySystemCli {
-  LibrarySystem system = LibrarySystem(items: []);
+  final LibrarySystemInterface system;
+  final LibraryView libraryView;
+  final InputHandler inputHandler;
+  bool isRunning;
+
+  LibrarySystemCli({
+    this.isRunning = true,
+    required this.system,
+    required this.libraryView,
+    required this.inputHandler,
+  });
 
   void start() {
-    while (true) {
+    while (isRunning) {
       _showMenu();
-      String? choice = stdin.readLineSync();
-      if (choice == null || choice.isEmpty) {
-        print("invalid input");
-      } else {
-        if (choice == "1") {
+      String? choice = inputHandler.readLine(
+        label: "please choose from these:\n",
+      );
+      // ازاي لو عايز اضيف item جديدة تسمع هنا علطول؟
+      switch (choice) {
+        case MenuOptions.getAvailable:
           _getTheAvailable();
-        } else if (choice == "2") {
-          _addNewBook();
-        } else if (choice == "3") {
-          _addNewDvd();
-        } else if (choice == "4") {
-          _addNewMagazine();
-        } else if (choice == "5") {
-          _borrow();
-        } else if (choice == "6") {
-          _reserve();
-        } else if (choice == "7") {
+          break;
+        case MenuOptions.addBook:
+          _addNewItem(type: LibraryItemType.book);
+          break;
+        case MenuOptions.addDVD:
+          _addNewItem(type: LibraryItemType.dvd);
+          break;
+        case MenuOptions.addMagazine:
+          _addNewItem(type: LibraryItemType.magazine);
+          break;
+        case MenuOptions.borrow:
+          _changeItemStatus(status: LibraryItemStatus.borrowed);
+          break;
+        case MenuOptions.reserve:
+          _changeItemStatus(status: LibraryItemStatus.reserved);
+          break;
+        case MenuOptions.exit:
           _exitSystem();
-        }
+        default:
+          libraryView.showMessage(message: "invalid Input\n");
+          break;
       }
     }
   }
 
-  void _showMenu() {
-    print("=======Library Managment System============");
-    print("please choose from these:\n");
-    print("1. Get all the available in the library");
-    print("2. Add New Book");
-    print("3. Add New DVD");
-    print("4. Add New Magazine");
-    print("5. I Need to borrow");
-    print("6. I Need to reserve");
-    print("7. Exit system");
+  void _addNewItem({required LibraryItemType type}) {
+    switch (type) {
+      case LibraryItemType.book:
+        final String? name = inputHandler.readLine(label: "Enter Book Name: ");
+        final String? author = inputHandler.readLine(
+          label: "Enter Book Author: ",
+        );
+        final String? pages = inputHandler.readLine(
+          label: "Enter Book Number of Pages: ",
+        );
+        final String? isbn = inputHandler.readLine(
+          label: "Enter Book isbn (International Standard Book Number): ",
+        );
+
+        if (name == null || author == null || isbn == null || pages == null) {
+          // الشكل ده مش عاجبني بس مش عارف اغيره ازاي ؟
+          libraryView.showMessage(message: "invalid Input\n");
+          return;
+        }
+
+        int? pagesNumber = int.tryParse(pages);
+        if (pagesNumber == null) {
+          libraryView.showMessage(message: "Pages must be a valid number\n");
+          return;
+        }
+
+        final Book newBook = Book(
+          title: name,
+          status: LibraryItemStatus.available,
+          author: author,
+          pages: pagesNumber,
+          isbn: isbn,
+        );
+
+        _addItemToSystem(newItem: newBook);
+
+        break;
+
+      case LibraryItemType.dvd:
+        final String? name = inputHandler.readLine(label: "Enter DVD Name :");
+        final String? duration = inputHandler.readLine(
+          label: "Enter DVD Duration :",
+        );
+        final String? director = inputHandler.readLine(
+          label: "Enter DVD Director :",
+        );
+
+        if (name == null || duration == null || director == null) {
+          libraryView.showMessage(message: "invalid Input\n");
+          return;
+        }
+
+        int? durationDVD = int.tryParse(duration);
+        if (durationDVD == null) {
+          libraryView.showMessage(message: "duration must be a vaild number\n");
+          return;
+        }
+
+        final DVD newDVD = DVD(
+          title: name,
+          status: LibraryItemStatus.available,
+          duration: durationDVD,
+          director: director,
+        );
+
+        _addItemToSystem(newItem: newDVD);
+        break;
+
+      case LibraryItemType.magazine:
+        final String? name = inputHandler.readLine(
+          label: "Enter Magazine Name :",
+        );
+        final String? issueNumber = inputHandler.readLine(
+          label: "Enter Magazine IssueNumber :",
+        );
+        final String? publisherName = inputHandler.readLine(
+          label: "Enter Magazine PublisherName :",
+        );
+
+        if (name == null || issueNumber == null || publisherName == null) {
+          libraryView.showMessage(message: "invalid Input\n");
+          return;
+        }
+
+        int? issueMagazineNumber = int.tryParse(issueNumber);
+        if (issueMagazineNumber == null) {
+          libraryView.showMessage(
+            message: "issue number must be a vaild number\n",
+          );
+          return;
+        }
+
+        final Magazine newMagazine = Magazine(
+          title: name,
+          status: LibraryItemStatus.available,
+          issueNumber: issueMagazineNumber,
+          publisher: publisherName,
+        );
+        _addItemToSystem(newItem: newMagazine);
+        break;
+    }
+  }
+
+  void _addItemToSystem({required LibraryItem newItem}) {
+    var result = system.addNewItem(newItem: newItem);
+    if (result) {
+      libraryView.showMessage(message: "Item added successfully");
+    } else {
+      libraryView.showMessage(message: "Item already exists");
+    }
   }
 
   void _getTheAvailable() {
-    print("The items available in the library: ${system.items}");
-  }
-
-  void _addNewBook() {
-    print("Enter book Details\n");
-    Book newBook;
-    print("Enter Book Name :");
-    String? name = stdin.readLineSync();
-    if (name == null || name.isEmpty) {
-      print("invalid input");
-    } else {
-      newBook = Book(
-        title: name,
-        status: Status.available,
-        author: '',
-        pages: 34,
-        isbn: '',
+    var itemsInList = system.getItems();
+    if (itemsInList == null) {
+      libraryView.showMessage(
+        message: "There are no existing items in the Library\n",
       );
-      system.addNewItem(item: newBook);
-      print("New Book Added\n");
-    }
-  }
-
-  void _addNewDvd() {
-    print("Enter DVD Details\n");
-    DVD newDvd;
-    print("Enter DVD Name :");
-    String? name = stdin.readLineSync();
-    if (name == null || name.isEmpty) {
-      print("invalid input");
     } else {
-      newDvd = DVD(
-        title: name,
-        status: Status.available,
-        duration: 23,
-        director: '',
+      libraryView.showMessage(
+        message: "The items available in the library: $itemsInList\n",
       );
-      system.addNewItem(item: newDvd);
     }
   }
 
-  void _addNewMagazine() {
-    print("Enter Magazine Details\n");
-    Magazine newMagazine;
-    print("Enter Magazine Name :");
-    String? name = stdin.readLineSync();
-    if (name == null || name.isEmpty) {
-      print("invalid input");
+  void _changeItemStatus({required LibraryItemStatus status}) {
+    final String? name = inputHandler.readLine(label: "Enter item name: \n");
+    if (name == null) {
+      libraryView.showMessage(message: "invalid Input\n");
     } else {
-      newMagazine = Magazine(
-        title: name,
-        status: Status.available,
-        issueNumber: 345,
-        publisher: '',
-      );
-      system.addNewItem(item: newMagazine);
-    }
-  }
-
-  void _borrow() {
-    print("Enter item name: \n");
-
-    String? name = stdin.readLineSync();
-    if (name == null || name.isEmpty) {
-      print("invalid input");
-    } else {
-      system.changeStatus(itemName: name, status: Status.borrowed);
-    }
-  }
-
-  void _reserve() {
-    print("Enter item name: \n");
-    String? name = stdin.readLineSync();
-    if (name == null || name.isEmpty) {
-      print("invalid input");
-    } else {
-      system.changeStatus(itemName: name, status: Status.reserved);
+      var result = system.changeStatus(itemName: name, status: status);
+      if (result) {
+        libraryView.showMessage(message: "item status Changed successfuly\n");
+      } else {
+        libraryView.showMessage(message: "This item does not exist\n");
+      }
     }
   }
 
   void _exitSystem() {
-    print("Library System Closed\n");
+    libraryView.showMessage(message: "Library System Closed\n");
+    isRunning = false;
+  }
+
+  void _showMenu() {
+    libraryView.showMessage(message: "=======Library Managment System=======");
+    libraryView.showMessage(message: MenuText.showMenu);
   }
 }

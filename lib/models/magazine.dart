@@ -10,13 +10,13 @@ class Magazine extends LibraryItem {
     required this.issueNumber,
     required this.publisher,
   });
-  @override
-  void borrow() {
-    print("Borrowing a Magazine");
-  }
+  // @override
+  // void borrow() {
+  //   print("Borrowing a Magazine");
+  // }
 
-  @override
-  void reserve() {
-    print("Reserve a Magazine");
-  }
+  // @override
+  // void reserve() {
+  //   print("Reserve a Magazine");
+  // }
 }

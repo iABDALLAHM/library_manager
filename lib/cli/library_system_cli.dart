@@ -83,7 +83,6 @@ class LibrarySystemCli {
         );
 
         _addItemToSystem(newItem: newBook);
-
         break;
 
       case LibraryItemType.dvd:
